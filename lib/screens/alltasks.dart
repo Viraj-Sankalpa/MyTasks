@@ -18,6 +18,25 @@ class _AllTasksState extends State<AllTasks> {
       "Try harder",
       "Try smarter",
     ];
+
+    final leftEditIcon = Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      color: const Color(0xFF2e3253),
+      child: const Icon(
+        Icons.edit,
+        color: Colors.white,
+      ),
+      alignment: Alignment.centerLeft,
+    );
+    final rightEditIcon = Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      color: Colors.redAccent,
+      child: const Icon(
+        Icons.delete,
+        color: Colors.white,
+      ),
+      alignment: Alignment.centerRight,
+    );
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -77,11 +96,28 @@ class _AllTasksState extends State<AllTasks> {
           ),
 
           //task titles
-          ListView.builder(itemBuilder: (context, index) {
-            return Container(
-              child: TaskWidget(text: myData[index]),
-            );
-          })
+          Flexible(
+            child: ListView.builder(
+              itemCount: myData.length,
+              itemBuilder: (context, index) {
+                return Dismissible(
+                  background: leftEditIcon,
+                  secondaryBackground: rightEditIcon,
+                  onDismissed: (DismissDirection direction) {
+                    print("after dismiss");
+                  },
+                  confirmDismiss: (DismissDirection direction) async {
+                    print("confirming");
+                    return true;
+                  },
+                  key: ObjectKey(index),
+                  child: Container(
+                    child: TaskWidget(text: myData[index]),
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
