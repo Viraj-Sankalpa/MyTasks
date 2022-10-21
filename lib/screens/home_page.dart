@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:mytasks/screens/add_task.dart';
+import 'package:mytasks/screens/alltasks.dart';
 import 'package:mytasks/utils/app_colors.dart';
 import 'package:mytasks/widgets/button_widget.dart';
 
@@ -57,17 +60,30 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: MediaQuery.of(context).size.height / 1.9,
             ),
-            Buttons(
-                backgroundColor: AppColors.mainColor,
-                buttonText: "Add Task",
-                textColor: Colors.white),
+            InkWell(
+              onTap: () {
+                // Get.to(() => AllTasks());
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddTask()));
+              },
+              child: Buttons(
+                  backgroundColor: AppColors.mainColor,
+                  buttonText: "Add Task",
+                  textColor: Colors.white),
+            ),
             SizedBox(
               height: 12,
             ),
-            Buttons(
-              backgroundColor: Colors.white,
-              buttonText: "View All",
-              textColor: AppColors.mainColor,
+            InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AllTasks()));
+              },
+              child: Buttons(
+                backgroundColor: Colors.white,
+                buttonText: "View All",
+                textColor: AppColors.mainColor,
+              ),
             ),
           ],
         ),

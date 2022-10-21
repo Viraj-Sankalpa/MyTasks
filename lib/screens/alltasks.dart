@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:mytasks/main.dart';
+import 'package:mytasks/screens/add_task.dart';
+import 'package:mytasks/screens/home_page.dart';
 import 'package:mytasks/utils/app_colors.dart';
+import 'package:mytasks/widgets/button_widget.dart';
 import 'package:mytasks/widgets/tasks_widget.dart';
 
 class AllTasks extends StatefulWidget {
@@ -45,9 +49,15 @@ class _AllTasksState extends State<AllTasks> {
           Container(
             padding: EdgeInsets.only(left: 20, top: 60),
             alignment: Alignment.topLeft,
-            child: Icon(
-              Icons.arrow_back,
-              color: AppColors.secondaryColor,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: AppColors.secondaryColor,
+              ),
             ),
             width: double.maxFinite,
             height: MediaQuery.of(context).size.height / 3.2,
@@ -64,15 +74,27 @@ class _AllTasksState extends State<AllTasks> {
             padding: const EdgeInsets.only(left: 20, right: 20),
             child: Row(
               children: [
-                Icon(
-                  Icons.home,
-                  color: AppColors.secondaryColor,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => HomePage())));
+                  },
+                  child: Icon(
+                    Icons.home,
+                    color: AppColors.secondaryColor,
+                  ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Icon(
-                  Icons.add_circle_outline,
+                InkWell(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: ((context) => AddTask())));
+                  },
+                  child: Icon(
+                    Icons.add_circle_outline,
+                  ),
                 ),
                 Expanded(
                   child: Container(),
@@ -107,8 +129,47 @@ class _AllTasksState extends State<AllTasks> {
                     print("after dismiss");
                   },
                   confirmDismiss: (DismissDirection direction) async {
-                    print("confirming");
-                    return true;
+                    // print("confirming");
+                    if (direction == DismissDirection.startToEnd) {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          barrierColor: Colors.transparent,
+                          context: context,
+                          builder: (_) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF2e3253).withOpacity(0.4),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              height: 300,
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Buttons(
+                                      backgroundColor: AppColors.mainColor,
+                                      buttonText: "View",
+                                      textColor: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Buttons(
+                                      backgroundColor: AppColors.mainColor,
+                                      buttonText: "Edit",
+                                      textColor: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                      return false;
+                    } else {
+                      return Future.delayed(Duration(seconds: 1),
+                          () => direction == DismissDirection.endToStart);
+                    }
                   },
                   key: ObjectKey(index),
                   child: Container(
